@@ -4,18 +4,23 @@ const cors = require('cors');
 
 const app = express();
 const db = mysql.createPool({
-	host: 'localhost',
-	user: 'root',
-	password: '',
-	database: 'goodluck',
-	multipleStatements: true
+    host: 'us-cdbr-east-04.cleardb.com',
+    user: 'bb3bd2b935de69',
+    password: 'fb7aa1ef',
+    database: 'heroku_fb1e780812f7b81',
+    multipleStatements: true
 });
 
-var corsOptions = {
-	origin: "http://localhost:3000"
-};
 
-app.use(cors(corsOptions));
+// Permission do enable CORS
+app.use((req, res, next) => {
+    //Qual site tem permissão de realizar a conexão, no exemplo abaixo está o "*" indicando que qualquer site pode fazer a conexão
+    res.header("Access-Control-Allow-Origin", "*");
+    //Quais são os métodos que a conexão pode realizar na API
+    res.header("Access-Control-Allow-Methods", 'GET,PUT,POST,DELETE,PATCH');
+    app.use(cors());
+    next();
+});
 
 // parse requests of content-type - application/json
 app.use(express.json());
