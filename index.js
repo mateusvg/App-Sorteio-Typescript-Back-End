@@ -177,6 +177,24 @@ app.get('/raffle/all', function (request, response) {
 }
 );
 
+app.put('/raffle/raffle/:id?', function (request, response) {
+	// Capture the input fields
+	let idRaffle = request.body.idRaffle
+	let RaffleUserDrawn = request.body.numeroSorteado
+	// Execute SQL query that'll select the account from the database based on the specified username and password
+	db.query(`UPDATE raffle SET RaffleUserDrawn = ? WHERE idRaffle = ?`, [RaffleUserDrawn, idRaffle], function (error, results, fields) {
+		// If there is an issue with the query, output the error
+		if (error) throw error;
+		// If the account exists
+		if (results.length > 0) {
+			response.statusCode(200);
+		} else {
+			response.send({ message: 'Não foi possivel atualizar' });
+		}
+		response.end();
+	});
+}
+);
 
 
 const PORT = process.env.PORT || 8080;
