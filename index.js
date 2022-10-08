@@ -4,23 +4,18 @@ const cors = require('cors');
 
 const app = express();
 const db = mysql.createPool({
-    host: 'us-cdbr-east-06.cleardb.net',
-    user: 'b0fa1f50f8ee7c',
-    password: '1dcbdead',
-    database: 'heroku_06e238fa8dcde39',
-    multipleStatements: true
+	host: 'localhost',
+	user: 'root',
+	password: '',
+	database: 'goodluck',
+	multipleStatements: true
 });
 
+var corsOptions = {
+	origin: "http://localhost:3000"
+};
 
-// Permission do enable CORS
-app.use((req, res, next) => {
-    //Qual site tem permissão de realizar a conexão, no exemplo abaixo está o "*" indicando que qualquer site pode fazer a conexão
-    res.header("Access-Control-Allow-Origin", "*");
-    //Quais são os métodos que a conexão pode realizar na API
-    res.header("Access-Control-Allow-Methods", 'GET,PUT,POST,DELETE,PATCH');
-    app.use(cors());
-    next();
-});
+app.use(cors(corsOptions));
 
 // parse requests of content-type - application/json
 app.use(express.json());
@@ -35,6 +30,14 @@ app.get("/", (req, res) => {
 
 app.get('/users', function (req, res) {
 	db.query('SELECT * FROM user ORDER BY idUser DESC', function (error, results, fields) {
+		if (error) throw error;
+		res.send(results)
+	});
+});
+
+app.get('/users/profile/:email', function (req, res) {
+	var email = req.params.email;
+	db.query('SELECT * FROM user where email=? ',[email], function (error, results, fields) {
 		if (error) throw error;
 		res.send(results)
 	});
@@ -68,38 +71,6 @@ app.post('/users/auth', function (request, response) {
 		response.end();
 	}
 });
-
-
-// app.post('/user/create', function(request, response) {
-// 	// Capture the input fields
-// 	let name = request.body.name;
-// 	let username = request.body.username;
-// 	let password = request.body.password;
-// 	let userId = request.body.userId;
-
-// 	// Ensure the input fields exists and are not empty
-// 	if (username && password) {
-// 		// Execute SQL query that'll select the account from the database based on the specified username and password
-// 		db.query(`INSERT into user ( idUser, name, email, password ) VALUES (?,?,?,?)`, [userId, name, username, password], function(error, results, fields) {
-// 			// If there is an issue with the query, output the error
-// 			if (error) throw error;
-// 			// If the account exists
-// 			if (results.length > 0) {
-// 				// Authenticate the user
-// 				// request.session.loggedin = true;
-// 				// request.session.username = username;
-// 				// Redirect to home page
-// 				response.redirect("/login");
-// 			} else {
-// 				response.send({message:'Usuario ja existente'});
-// 			}			
-// 			response.end();
-// 		});
-// 	} else {
-// 		response.send('Entre com usuario e senha.');
-// 		response.end();
-// 	}
-// });
 
 app.post('/user/create', function (request, response) {
 	// Capture the input fields
@@ -197,7 +168,42 @@ app.put('/raffle/raffle/:id?', function (request, response) {
 );
 
 
+
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
 	console.log(`Server is running on port ${PORT}.`);
 });
+
+
+
+
+// app.post('/user/create', function(request, response) {
+// 	// Capture the input fields
+// 	let name = request.body.name;
+// 	let username = request.body.username;
+// 	let password = request.body.password;
+// 	let userId = request.body.userId;
+
+// 	// Ensure the input fields exists and are not empty
+// 	if (username && password) {
+// 		// Execute SQL query that'll select the account from the database based on the specified username and password
+// 		db.query(`INSERT into user ( idUser, name, email, password ) VALUES (?,?,?,?)`, [userId, name, username, password], function(error, results, fields) {
+// 			// If there is an issue with the query, output the error
+// 			if (error) throw error;
+// 			// If the account exists
+// 			if (results.length > 0) {
+// 				// Authenticate the user
+// 				// request.session.loggedin = true;
+// 				// request.session.username = username;
+// 				// Redirect to home page
+// 				response.redirect("/login");
+// 			} else {
+// 				response.send({message:'Usuario ja existente'});
+// 			}			
+// 			response.end();
+// 		});
+// 	} else {
+// 		response.send('Entre com usuario e senha.');
+// 		response.end();
+// 	}
+// });

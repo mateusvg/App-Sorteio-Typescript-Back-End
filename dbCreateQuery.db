@@ -51,3 +51,7 @@ ENGINE = InnoDB;
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
+
+insert into user values (1,'teste', 123, 'teste@teste.com')
+insert into raffle values (1,teste,155,' ','Wed, 28 Sep 2022 03:00:00 GMT', 'descrição 1', 1)

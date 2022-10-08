@@ -1,0 +1,3 @@
+insert into user values(1,'teste',123,'teste@teste.com');
+
+insert into raffle values(1, 'Sorteio teste', 153, ' ', '28/09/2022', 'descrição teste', 1);
